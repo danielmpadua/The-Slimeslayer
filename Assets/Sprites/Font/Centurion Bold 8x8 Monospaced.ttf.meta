@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: cc481618cae441d4ebe6e9a3c2eea845
+timeCreated: 1585621093
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Centurion Bold 8x8 Monospaced
+  fontNames:
+  - Centurion Bold 8x8 Monospaced
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
