@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class playerController : MonoBehaviour {
+    private gameController _gameController;
 
 	private Rigidbody2D playerRigidBody;
     private Animator playerAnimator;
@@ -23,6 +24,10 @@ public class playerController : MonoBehaviour {
 	void Start () {
         playerRigidBody = GetComponent < Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
+
+        _gameController = FindObjectOfType(typeof(gameController)) as gameController;
+        _gameController.playerTransform = this.transform;
+
     }
 	
 	void Update () {
