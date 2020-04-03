@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class gameController : MonoBehaviour {
 
-    private Camera camera;
+    private Camera cam;
     public Transform playerTransform;
     public Transform limitCameraLeft, limitCameraRight, limitCameraTop, limitCameraBottom;
 
     public float speedCamera;
 
     void Start() {
-        camera = Camera.main;
+        cam = Camera.main;
     }
 
     void Update() {
@@ -26,25 +26,25 @@ public class gameController : MonoBehaviour {
         float camPositionX = playerTransform.position.x;
         float camPositionY = playerTransform.position.y;
 
-        if (camera.transform.position.x < limitCameraLeft.transform.position.x && playerTransform.position.x < limitCameraLeft.position.x)
+        if (cam.transform.position.x < limitCameraLeft.transform.position.x && playerTransform.position.x < limitCameraLeft.position.x)
         {
             camPositionX = limitCameraLeft.transform.position.x;
         }
-        else if (camera.transform.position.x > limitCameraRight.transform.position.x && playerTransform.position.x > limitCameraRight.position.x)
+        else if (cam.transform.position.x > limitCameraRight.transform.position.x && playerTransform.position.x > limitCameraRight.position.x)
         {
             camPositionX = limitCameraRight.transform.position.x;
         }
 
-        if (camera.transform.position.y < limitCameraBottom.transform.position.y && playerTransform.position.y < limitCameraBottom.position.y)
+        if (cam.transform.position.y < limitCameraBottom.transform.position.y && playerTransform.position.y < limitCameraBottom.position.y)
         {
             camPositionY = limitCameraBottom.transform.position.y;
         }
-        else if (camera.transform.position.y > limitCameraTop.transform.position.y && playerTransform.position.y > limitCameraTop.position.y)
+        else if (cam.transform.position.y > limitCameraTop.transform.position.y && playerTransform.position.y > limitCameraTop.position.y)
         {
             camPositionY = limitCameraTop.transform.position.y;
         }
 
-        Vector3 camPosition = new Vector3(camPositionX, camPositionY, camera.transform.position.z);
-        camera.transform.position = Vector3.Lerp(camera.transform.position, camPosition, speedCamera * Time.deltaTime);
+        Vector3 camPosition = new Vector3(camPositionX, camPositionY, cam.transform.position.z);
+        cam.transform.position = Vector3.Lerp(cam.transform.position, camPosition, speedCamera * Time.deltaTime);
     }
 }
