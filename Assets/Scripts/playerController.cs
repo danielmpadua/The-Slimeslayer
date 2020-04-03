@@ -20,7 +20,7 @@ public class playerController : MonoBehaviour {
     public Transform hand;
     public GameObject hitBoxPrefab;
 
-	
+	// Funçoes Nativas
 	void Start () {
         playerRigidBody = GetComponent < Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
@@ -67,6 +67,16 @@ public class playerController : MonoBehaviour {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.02f);
     }
 
+    void OnTriggerEnter2D(Collider2D collider){
+        if (collider.gameObject.tag == "Coletavel"){
+            _gameController.playSoundEffect(_gameController.soundEffectCoin, 0.5f);
+            Destroy(collider.gameObject);
+        }else if (collider.gameObject.tag == "Damage"){
+            print("Dano");
+        }
+    }
+
+    // Funções criadas
     void Flip() {
         isLookLeft = !isLookLeft;
         float scaleX = transform.localScale.x * -1;
