@@ -7,6 +7,7 @@ public class playerController : MonoBehaviour {
 
 	private Rigidbody2D playerRigidBody;
     private Animator playerAnimator;
+    private SpriteRenderer playerSpriteRenderer;
 
     public float speed;
     public float jumpForce;
@@ -20,10 +21,16 @@ public class playerController : MonoBehaviour {
     public Transform hand;
     public GameObject hitBoxPrefab;
 
+    public Color hitColor;
+    public Color invencibleColor;
+
+    public int maxHP;
+
 	// Funçoes Nativas
 	void Start () {
         playerRigidBody = GetComponent < Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
+        playerSpriteRenderer = GetComponent<SpriteRenderer>();
 
         _gameController = FindObjectOfType(typeof(gameController)) as gameController;
         _gameController.playerTransform = this.transform;
@@ -72,7 +79,7 @@ public class playerController : MonoBehaviour {
             _gameController.playSoundEffect(_gameController.soundEffectCoin, 0.5f);
             Destroy(collider.gameObject);
         }else if (collider.gameObject.tag == "Damage"){
-            print("Dano");
+            StartCoroutine("damageController");
         }
     }
 
@@ -95,5 +102,30 @@ public class playerController : MonoBehaviour {
 
     void footStep(){
         _gameController.playSoundEffect(_gameController.soundEffectStep[Random.Range(0, _gameController.soundEffectStep.Length)], 1f);
+    }
+
+    IEnumerator damageController(){
+        maxHP --;
+
+        if(maxHP <= 0){
+            print("Deu Game Over");
+        }
+
+        this.gameObject.layer = LayerMask.NameToLayer("Invencible");
+
+        _gameController.playSoundEffect(_gameController.soundEffectDamage,0.5f);
+        playerSpriteRenderer.color = hitColor;
+        yield return new WaitForSeconds(0.3f);
+        playerSpriteRenderer.color = invencibleColor;
+
+        for (int i = 0; i < 5; i++){
+            playerSpriteRenderer.enabled = false;
+            yield return new WaitForSeconds(0.2f);
+            playerSpriteRenderer.enabled = true;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        playerSpriteRenderer.color = Color.white;
+        this.gameObject.layer = LayerMask.NameToLayer("Player");
     }
 }

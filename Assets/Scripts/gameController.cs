@@ -15,9 +15,13 @@ public class gameController : MonoBehaviour {
     public AudioSource musicSource;
 
     public AudioClip soundEffectCoin;
+
+    public AudioClip soundEffectDamage;
     public AudioClip soundEffectJump;
     public AudioClip soundEffectAtack;
+
     public AudioClip soundEffectEnemyDead;
+    
     public AudioClip[] soundEffectStep;
 
     void Start() {
