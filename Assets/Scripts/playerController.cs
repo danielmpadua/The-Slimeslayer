@@ -45,12 +45,14 @@ public class playerController : MonoBehaviour {
         }
 
         if (Input.GetButtonDown("Jump") && isGrounded){
+            _gameController.playSoundEffect(_gameController.soundEffectJump,0.5f);
             playerRigidBody.AddForce(new Vector2(0, jumpForce));
         }
 
         if (Input.GetButtonDown("Fire1") && !isAtack) {
             playerAnimator.SetTrigger("atack");
             isAtack = true;
+            _gameController.playSoundEffect(_gameController.soundEffectAtack, 0.5f);
         }
 
         playerRigidBody.velocity = new Vector2(horizontalMoviment * speed, speedY);
@@ -79,5 +81,9 @@ public class playerController : MonoBehaviour {
     void hitBoxAtack() {
         GameObject hitBoxTemp = Instantiate(hitBoxPrefab, hand.position, transform.localRotation);
         Destroy(hitBoxTemp, 0.2f);
+    }
+
+    void footStep(){
+        _gameController.playSoundEffect(_gameController.soundEffectStep[Random.Range(0, _gameController.soundEffectStep.Length)], 1f);
     }
 }

@@ -10,6 +10,14 @@ public class gameController : MonoBehaviour {
 
     public float speedCamera;
 
+    [Header("Audio")]
+    public AudioSource soundEffectSource;
+    public AudioSource musicSource;
+
+    public AudioClip soundEffectJump;
+    public AudioClip soundEffectAtack;
+    public AudioClip[] soundEffectStep;
+
     void Start() {
         cam = Camera.main;
     }
@@ -47,4 +55,10 @@ public class gameController : MonoBehaviour {
         Vector3 camPosition = new Vector3(camPositionX, camPositionY, cam.transform.position.z);
         cam.transform.position = Vector3.Lerp(cam.transform.position, camPosition, speedCamera * Time.deltaTime);
     }
+
+    public void playSoundEffect(AudioClip soundClip, float volume){
+        soundEffectSource.PlayOneShot(soundClip, volume);
+    }
+
+    
 }
