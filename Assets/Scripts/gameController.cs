@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum musicScene{
+    SCENE0,SCENE1
+}
+
 public class gameController : MonoBehaviour {
 
     private Camera cam;
@@ -24,8 +28,20 @@ public class gameController : MonoBehaviour {
     
     public AudioClip[] soundEffectStep;
 
+    public musicScene currentMusic;
+
+    public AudioClip musicScene0, musicScene1;
+
+    public GameObject[] scene;
+
     void Start() {
         cam = Camera.main;
+
+        /*foreach(GameObject sceneControl in scene){
+            sceneControl.SetActive(false);
+        }
+
+        scene[0].SetActive(true);*/
     }
 
     void Update() {
@@ -66,5 +82,37 @@ public class gameController : MonoBehaviour {
         soundEffectSource.PlayOneShot(soundClip, volume);
     }
 
+    public void selectMusic(musicScene newMusic){
+        AudioClip clip = null;
+
+        switch (newMusic) {
+            case musicScene.SCENE0:
+                clip = musicScene0;
+                break;
+            case musicScene.SCENE1:
+                clip = musicScene1;
+                break;
+        }
+
+        StartCoroutine("switchMusic", clip);
+    }
+
+    IEnumerator switchMusic(AudioClip music){
+        float maxVolume = musicSource.volume;
+
+        for (float volume = maxVolume; volume > 0; volume -= 0.01f){
+            musicSource.volume = volume;
+            yield return new WaitForEndOfFrame();
+        }
+
+        musicSource.clip = music;
+        musicSource.Play();
+
+        for (float volume = 0; volume < maxVolume; volume += 0.01f)
+        {
+            musicSource.volume = volume;
+            yield return new WaitForEndOfFrame();
+        }
+    }
     
 }

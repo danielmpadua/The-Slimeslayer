@@ -108,7 +108,7 @@ public class playerController : MonoBehaviour {
         maxHP --;
 
         if(maxHP <= 0){
-            print("Deu Game Over");
+            Debug.LogError("pause");
         }
 
         this.gameObject.layer = LayerMask.NameToLayer("Invencible");
