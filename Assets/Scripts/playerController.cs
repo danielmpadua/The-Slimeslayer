@@ -38,6 +38,14 @@ public class playerController : MonoBehaviour {
     }
 	
 	void Update () {
+        playerAnimator.SetBool("isGrounded", isGrounded);
+
+        if(_gameController.currentState != gameState.GAMEPLAY){
+            playerRigidBody.velocity = new Vector2(0, playerRigidBody.velocity.y);
+            playerAnimator.SetInteger("horizontal", 0);
+            return;
+        }
+
         float horizontalMoviment = Input.GetAxisRaw("Horizontal");
         float speedY = playerRigidBody.velocity.y;
 
@@ -65,7 +73,6 @@ public class playerController : MonoBehaviour {
         playerRigidBody.velocity = new Vector2(horizontalMoviment * speed, speedY);
 
         playerAnimator.SetInteger("horizontal", (int)horizontalMoviment);
-        playerAnimator.SetBool("isGrounded", isGrounded);
         playerAnimator.SetFloat("speedY", speedY);
         playerAnimator.SetBool("isAtack", isAtack);
 	}
@@ -75,11 +82,26 @@ public class playerController : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D collider){
-        if (collider.gameObject.tag == "Coletavel"){
+        if (collider.gameObject.tag == "Coletavel") {
+
             _gameController.playSoundEffect(_gameController.soundEffectCoin, 0.5f);
+            _gameController.getCoin();
             Destroy(collider.gameObject);
-        }else if (collider.gameObject.tag == "Damage"){
-            StartCoroutine("damageController");
+
+        } else if (collider.gameObject.tag == "Damage") {
+            _gameController.getHit();
+            if (_gameController.lifePlayer > 0) {
+                StartCoroutine("damageController");
+            }
+        } else if (collider.gameObject.tag == "Abism") {
+            _gameController.playSoundEffect(_gameController.soundEffectDamage, 0.5f);
+            _gameController.lifePlayer = 0;
+            _gameController.heartController();
+            _gameController.gameOverPanel.SetActive(true);
+            _gameController.currentState = gameState.GAMEOVER;
+            _gameController.selectMusic(musicScene.GAMEOVER);
+        }else if(collider.gameObject.tag == "Flag"){
+            _gameController.theEnd();
         }
     }
 
@@ -128,4 +150,5 @@ public class playerController : MonoBehaviour {
         playerSpriteRenderer.color = Color.white;
         this.gameObject.layer = LayerMask.NameToLayer("Player");
     }
+
 }

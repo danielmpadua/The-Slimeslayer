@@ -21,7 +21,11 @@ public class batIA : MonoBehaviour {
     }
 	
 	void Update () {
-		if(isFollow == true){
+        if (_gameController.currentState != gameState.GAMEPLAY){
+            return;
+        }
+
+        if (isFollow == true){
             transform.position = Vector3.MoveTowards(transform.position, _gameController.playerTransform.position, speed * Time.deltaTime);
         }
 

@@ -20,7 +20,7 @@ public class teleport : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider) {
 		if(collider.gameObject.tag == "Player"){
 
-            _gameController.selectMusic(musicScene.SCENE1);
+            _gameController.selectMusic(newMusic);
             
             collider.transform.position = end.position;
 

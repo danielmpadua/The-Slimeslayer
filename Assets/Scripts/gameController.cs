@@ -1,12 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum musicScene{
-    SCENE0,SCENE1
+    SCENE0,SCENE1,GAMEOVER, THEEND
+}
+
+public enum gameState{
+    TITLE, GAMEPLAY, GAMEOVER, THEEND
 }
 
 public class gameController : MonoBehaviour {
+
+    public gameState currentState;
+
+    public GameObject titlePanel, gameOverPanel, theEndPanel;
 
     private Camera cam;
     public Transform playerTransform;
@@ -30,22 +40,29 @@ public class gameController : MonoBehaviour {
 
     public musicScene currentMusic;
 
-    public AudioClip musicScene0, musicScene1;
+    public AudioClip musicScene0, musicScene1, musicGameOver, musicTheEnd;
 
     public GameObject[] scene;
 
+    public int coinCounter;
+    public Text coinPrint;
+    public Image[] hearts;
+    public int lifePlayer;
+
     void Start() {
         cam = Camera.main;
-
-        /*foreach(GameObject sceneControl in scene){
-            sceneControl.SetActive(false);
-        }
-
-        scene[0].SetActive(true);*/
+        heartController();
     }
 
     void Update() {
-
+        if(currentState == gameState.TITLE && Input.GetButtonDown("Jump")) {
+            currentState = gameState.GAMEPLAY;
+            titlePanel.SetActive(false);
+        }else if (currentState == gameState.GAMEOVER && Input.GetButtonDown("Jump")){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }else if (currentState == gameState.THEEND && Input.GetButtonDown("Jump")){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     void LateUpdate() {
@@ -88,9 +105,19 @@ public class gameController : MonoBehaviour {
         switch (newMusic) {
             case musicScene.SCENE0:
                 clip = musicScene0;
+                this.currentMusic = musicScene.SCENE0;
                 break;
             case musicScene.SCENE1:
+                this.currentMusic = musicScene.SCENE1;
                 clip = musicScene1;
+                break;
+            case musicScene.GAMEOVER:
+                this.currentMusic = musicScene.GAMEOVER;
+                clip = musicGameOver;
+                break;
+            case musicScene.THEEND:
+                this.currentMusic = musicScene.THEEND;
+                clip = musicTheEnd;
                 break;
         }
 
@@ -113,6 +140,38 @@ public class gameController : MonoBehaviour {
             musicSource.volume = volume;
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    public void heartController() {
+        foreach(Image heart in hearts){
+            heart.enabled = false;
+        }
+
+        for(int i = 0; i < lifePlayer; i++){
+            hearts[i].enabled = true;
+        }
+    }
+
+    public void getHit(){
+        lifePlayer -= 1;
+        heartController();
+        if(lifePlayer <= 0){
+            playerTransform.gameObject.SetActive(false);
+            gameOverPanel.SetActive(true);
+            currentState = gameState.GAMEOVER;
+            selectMusic(musicScene.GAMEOVER);
+        }
+    }
+
+    public void getCoin(){
+        coinCounter += 1;
+        coinPrint.text = coinCounter.ToString();
+    }
+
+    public void theEnd(){
+        currentState = gameState.THEEND;
+        theEndPanel.SetActive(true);
+        selectMusic(musicScene.THEEND);
     }
     
 }
